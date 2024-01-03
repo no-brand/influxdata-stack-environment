@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  influxdb:
+    image: influxdb:2.7.4
+    container_name: influxdb
+    ports:
+      - "18086:8086"
+    env_file:
+      - "${PWD}/environment/config/env.influxdb"
+    volumes:
+      - "${PWD}/.container/influxdb/data:/var/lib/influxdb"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "13000:3000"
+    env_file:
+      - "${PWD}/environment/config/env.grafana"
+    volumes:
+      - "${PWD}/.container/grafana/data:/var/lib/grafana"
+    depends_on: [influxdb]
+    links: [influxdb]
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    volumes:
+      - "${PWD}/.container/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro"
+    depends_on: [influxdb]
+    links: [influxdb]
