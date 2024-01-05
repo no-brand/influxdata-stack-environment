@@ -27,6 +27,6 @@ services:
     container_name: telegraf
     volumes:
       - "${PWD}/environment/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro"
-      - "${PWD}/.container/telegraf/data:/var/lib/telegraf"
+      - "${PWD}/.container/telegraf/data:/tmp"
     depends_on: [influxdb]
     links: [influxdb]
